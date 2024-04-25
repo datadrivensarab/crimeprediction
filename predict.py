@@ -1,19 +1,18 @@
 import streamlit as st
 import pickle
-import numpy as np
+import pandas as pd
 
+# Load model and label encoder
+def load_model_and_encoder():
+    with open('model_and_encoder.pkl', 'rb') as file:
+        data = pickle.load(file)
+    return data['model'], data['encoder']
 
-# def load_model():
-#     with open('model.pkl', 'rb') as file:
-#         data = pickle.load(file)
-#     return data
+pipeline, label_encoder = load_model_and_encoder()
 
-# data = load_model()
-
-# classifier = data["model"]
-# encoder = data["le"]
 
 def show_predict_page():
+    
     st.title("Mass Casuality Incident Category Prediction ")
 
     st.write("""### We need some information to predict the crime category""")
@@ -82,3 +81,18 @@ def show_predict_page():
     hood = st.selectbox("Neighbourhood", occ_hood)
     ok = st.button("Predict 🔮")
 
+    if ok:
+        input_data = pd.DataFrame({
+            'OCC_MONTH': [month],
+            'OCC_DAY': [occ_day],
+            'OCC_DOW': [dow],
+            'OCC_HOUR': [occ_hour],
+            'OCC_TIME_RANGE': [time_range],
+            'NEIGHBOURHOOD_158': [hood]  # Adjust column name as needed
+        })
+        prediction_numeric = pipeline.predict(input_data)
+        prediction_category = label_encoder.inverse_transform(prediction_numeric)[0]
+        st.subheader(f"The predicted crime category is {prediction_category}")
+
+# if __name__ == '__main__':
+#     show_predict_page()
