@@ -29,7 +29,7 @@ It includes data cleaning, exploratory data analysis, model training, and a stre
 ## Installation
 
 1. Clone the repository:    
-   git clone <your-repo-url>    
+   git clone https://github.com/datadrivensarab/crimeprediction.git   
    cd crimeprediction-main  
 
 2. Create and activate a virtual environment:  
